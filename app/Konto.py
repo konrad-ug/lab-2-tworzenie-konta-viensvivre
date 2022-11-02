@@ -6,6 +6,13 @@ class Konto:
         self.kod = kod
         self.saldo = self.kod_rabatowy_wiek()
 
+    def przelew_wychodzacy(self, przelew):
+        if self.saldo >= przelew:
+            self.saldo -= przelew
+
+    def przelew_przychodzacy(self, przelew):
+        self.saldo += przelew
+
     def sprawdzenie_peselu(self, pesel):
         if len(pesel) == 11:
             return pesel
@@ -18,19 +25,23 @@ class Konto:
             if int(self.pesel[0]) == 0:
                 if int(self.pesel[2] == 0) or int(self.pesel[2] == 1):
                     rok += (1900 + int(self.pesel[1]))
+                    if rok<1960:
+                        return False
                 if int(self.pesel[2] == 2) or int(self.pesel[2] == 3):
                     rok += (2000 + int(self.pesel[1]))
             elif int(self.pesel[0]) > 0:
                 if int(self.pesel[2] == 0) or int(self.pesel[2] == 1):
                     rok += (1900 + int(self.pesel[0:2]))
+                    if rok<1960:
+                        return False
                 if int(self.pesel[2] == 2) or int(self.pesel[2] == 3):
                     rok += (2000 + int(self.pesel[0:2]))
         return False
 
     def czy_po_1960(self):
         if self.rok_urodzenia() != False:
-            return self.rok_urodzenia() > 1960
-        return "Niepoprawny pesel"
+            return True
+        return False
 
     def kod_rabatowy_wiek(self):
         if self.kod != None and self.czy_po_1960():
@@ -38,6 +49,7 @@ class Konto:
                 poczatek = self.kod[0:5]
                 if poczatek == 'PROM_':
                     return 50
+            return 0
         else:
             return 0
 

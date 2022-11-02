@@ -36,3 +36,36 @@ class TestCreateBankAccount(unittest.TestCase):
     def test_urodzeni_przed_1960(self):
         siodme_konto = Konto("Adam", "Mickiewicz", "23015849211", "PROM_XXX")
         self.assertEqual(siodme_konto.saldo, 0, "Saldo powinno wynosić zero - osoba urodzona przed 1960")
+
+class TestPrzelewy(unittest.TestCase):
+
+    def test_przelew_wychodzacy_wystarczajace_srodki(self):
+        konto = Konto("Dariusz", "Januszewski", "02561422920")
+        przelew = 200
+        konto.saldo = 500
+        konto.przelew_wychodzacy(przelew)
+        self.assertEqual(konto.saldo, 500 - przelew, "Nie udało się wykonać przelewu")
+
+    def test_przelew_wychodzacy_niewystarczajace_srodki(self):
+        konto = Konto("Dariusz", "Januszewski", "02561422920")
+        przelew = 600
+        konto.saldo = 500
+        konto.przelew_wychodzacy(przelew)
+        self.assertEqual(konto.saldo, 500, "Niewystarczające środki a przelew został wykonany")
+
+    def test_przelew_przychodzacy(self):
+        konto = Konto("Dariusz", "Januszewski", "02561422920")
+        przelew = 300
+        konto.saldo = 500
+        konto.przelew_przychodzacy(przelew)
+        self.assertEqual(konto.saldo, 500 + przelew, "Przelew nie został wykonany")
+
+    def test_kilka_przelewow(self):
+        konto = Konto("Dariusz", "Januszewski", "02561422920")
+        konto.saldo = 500
+        konto.przelew_przychodzacy(300)
+        konto.przelew_wychodzacy(400)
+        konto.przelew_przychodzacy(500)
+        konto.przelew_wychodzacy(250)
+        self.assertEqual(konto.saldo, 500+300-400+500-250, "Nie udało się wykonać wszystkich przelewów")
+
