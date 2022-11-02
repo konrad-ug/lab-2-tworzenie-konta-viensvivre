@@ -18,28 +18,43 @@ class Konto:
             if int(self.pesel[0]) == 0:
                 if int(self.pesel[2] == 0) or int(self.pesel[2] == 1):
                     rok += (1900 + int(self.pesel[1]))
+                    if rok<1960:
+                        return False
+                    else:
+                        return True
                 if int(self.pesel[2] == 2) or int(self.pesel[2] == 3):
                     rok += (2000 + int(self.pesel[1]))
+                    return True
             elif int(self.pesel[0]) > 0:
                 if int(self.pesel[2] == 0) or int(self.pesel[2] == 1):
                     rok += (1900 + int(self.pesel[0:2]))
+                    if rok<1960:
+                        return False
+                    else:
+                        return True
                 if int(self.pesel[2] == 2) or int(self.pesel[2] == 3):
                     rok += (2000 + int(self.pesel[0:2]))
-        return False
+                    return True
+            else:
+                return False
+        else:
+            return False
 
     def czy_po_1960(self):
         if self.rok_urodzenia() != False:
-            return self.rok_urodzenia() > 1960
-        return "Niepoprawny pesel"
+            return True
+        return False
 
     def kod_rabatowy_wiek(self):
-        if self.kod != None and self.czy_po_1960():
+        if self.kod != None and self.czy_po_1960() == True:
             if len(self.kod) == 8:
                 poczatek = self.kod[0:5]
                 if poczatek == 'PROM_':
                     return 50
+            return 0
         else:
             return 0
+
 
 
 

@@ -34,5 +34,5 @@ class TestCreateBankAccount(unittest.TestCase):
         self.assertEqual(szoste_konto.saldo, 50, "Nie uwzględniono kodu rabatowego mimo prawidłowego wieku")
 
     def test_urodzeni_przed_1960(self):
-        siodme_konto = Konto("Adam", "Mickiewicz", "23015849211", "PROM_XXX")
-        self.assertEqual(siodme_konto.saldo, 0, "Saldo powinno wynosić zero - osoba urodzona przed 1960")
+        siodme_konto = Konto("Adam", "Mickiewicz", "83015849211", "PROM_XXX")
+        self.assertEqual(siodme_konto.saldo, 50, "Nie uwzględniono bonusu pomimi dobrego wieku i kodu")
