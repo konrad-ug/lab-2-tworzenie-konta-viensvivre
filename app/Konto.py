@@ -62,6 +62,14 @@ class Konto:
         else:
             return 0
 
+class KontoFirmowe:
+    def __init__(self, nazwa, NIP):
+        self.nazwa = nazwa
+        if len(NIP) != 10:
+            self.NIP = "Niepoprawny NIP"
+        else:
+            self.NIP = NIP
+
 
 
 

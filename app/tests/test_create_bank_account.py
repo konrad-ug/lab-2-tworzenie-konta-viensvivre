@@ -1,6 +1,7 @@
 import unittest
 
 from ..Konto import Konto
+from ..Konto import KontoFirmowe
 
 class TestCreateBankAccount(unittest.TestCase):
 
@@ -68,4 +69,19 @@ class TestPrzelewy(unittest.TestCase):
         konto.przelew_przychodzacy(500)
         konto.przelew_wychodzacy(250)
         self.assertEqual(konto.saldo, 500+300-400+500-250, "Nie udało się wykonać wszystkich przelewów")
+
+class KontaFirmowe(unittest.TestCase):
+
+    def test_konto_firmowe(self):
+        konto1 = KontoFirmowe("Budimex", "2203488202")
+        self.assertEqual(konto1.nazwa, "Budimex", "Nazwa nie została zapisana")
+        self.assertEqual(konto1.NIP, "2203488202", "NIP nie został zapisany")
+
+    def test_poprawny_NIP(self):
+        konto1 = KontoFirmowe("Budimex", "2203202895")
+        self.assertEqual(len(konto1.NIP), 10, "Niepoprawna długość NIP")
+
+    def test_niepoprawny_NIP(self):
+        konto1 = KontoFirmowe("Budimex", "22895")
+        self.assertEqual(konto1.NIP, "Niepoprawny NIP")
 
