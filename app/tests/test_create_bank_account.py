@@ -85,3 +85,28 @@ class KontaFirmowe(unittest.TestCase):
         konto1 = KontoFirmowe("Budimex", "22895")
         self.assertEqual(konto1.NIP, "Niepoprawny NIP")
 
+class TestPrzelewyEkspresowe(unittest.TestCase):
+
+    def test_ekspresowy_konto_zwykle_udany_przelew(self):
+        konto = Konto("Dariusz", "Januszewski", "02561422920")
+        konto.saldo = 600
+        konto.przelew_ekspresowy(400)
+        self.assertEqual(konto.saldo, 600-400-1, "Nie udało się wykonać przelewu")
+
+    def test_ekspresowy_konto_zwykle_nieudany_przelew(self):
+        konto = Konto("Dariusz", "Januszewski", "02561422920")
+        konto.saldo = 500
+        konto.przelew_ekspresowy(600)
+        self.assertEqual(konto.saldo, 500, "Przelew wykonany pomimo niewystarczających środków")
+
+    def test_ekspresowy_konto_firmowe_udany_przelew(self):
+        konto = KontoFirmowe("Budimex", "2203202895")
+        konto.saldo = 650
+        konto.przelew_ekspresowy(350)
+        self.assertEqual(konto.saldo, 650-350-5, "Nie udało się wykonać przelewu")
+
+    def test_ekspresowy_konto_firmowe_nieudany_przelew(self):
+        konto = KontoFirmowe("Budimex", "2203202895")
+        konto.saldo = 250
+        konto.przelew_ekspresowy(350)
+        self.assertEqual(konto.saldo, 250, "Przelew wykonany pomimo niewystarczających środków")

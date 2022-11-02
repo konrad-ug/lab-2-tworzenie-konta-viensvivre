@@ -13,6 +13,11 @@ class Konto:
     def przelew_przychodzacy(self, przelew):
         self.saldo += przelew
 
+    def przelew_ekspresowy(self, przelew):
+        if self.saldo >= przelew:
+            self.saldo -= przelew
+            self.saldo -= 1
+
     def sprawdzenie_peselu(self, pesel):
         if len(pesel) == 11:
             return pesel
@@ -69,7 +74,11 @@ class KontoFirmowe:
             self.NIP = "Niepoprawny NIP"
         else:
             self.NIP = NIP
+        self.saldo = 0
 
-
+    def przelew_ekspresowy(self, przelew):
+        if self.saldo >= przelew:
+            self.saldo -= przelew
+            self.saldo -= 5
 
 
