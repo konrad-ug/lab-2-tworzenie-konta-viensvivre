@@ -35,9 +35,9 @@ class testCreateBankAccount(unittest.TestCase):
         osme_konto =  Konto("Borys", "Kowalski", "08114887211", "PROM_XUZ")
         self.assertEqual(osme_konto.saldo, 0, "Uwzględniono bonus pomimo złego wieku")
 
-    #def test_urodzeni_w_latach_2010_plus(self):
-        #osme_konto = Konto("Borys", "Kowalski", "12214887211", "PROM_XUZ")
-        #self.assertEqual(osme_konto.saldo, 50, "Nie uwzględniono kodu rabatowego mimo prawidłowego wieku")
+    def test_urodzeni_w_latach_2010_plus(self):
+        osme_konto = Konto("Borys", "Kowalski", "12214887211", "PROM_XUZ")
+        self.assertEqual(osme_konto.saldo, 50, "Nie uwzględniono kodu rabatowego mimo prawidłowego wieku")
 
     def test_urodzeni_po_1960(self):
         szoste_konto = Konto("Jaś", "Fasola", "02254552112", "PROM_XYZ")

@@ -5,18 +5,23 @@ class Konto:
         self.pesel = self.sprawdzenie_peselu(pesel)
         self.kod = kod
         self.saldo = self.kod_rabatowy_wiek()
+        self.historia = []
 
     def przelew_wychodzacy(self, przelew):
         if self.saldo >= przelew:
             self.saldo -= przelew
+            self.historia.append(-przelew)
 
     def przelew_przychodzacy(self, przelew):
         self.saldo += przelew
+        self.historia.append(przelew)
 
     def przelew_ekspresowy(self, przelew):
         if self.saldo >= przelew:
             self.saldo -= przelew
             self.saldo -= 1
+            self.historia.append(-przelew)
+            self.historia.append(-1)
 
     def sprawdzenie_peselu(self, pesel):
         if len(pesel) == 11:
@@ -66,9 +71,12 @@ class KontoFirmowe:
         else:
             self.NIP = NIP
         self.saldo = 0
+        self.historia = []
 
     def przelew_ekspresowy(self, przelew):
         if self.saldo >= przelew:
             self.saldo -= przelew
             self.saldo -= 5
+            self.historia.append(-przelew)
+            self.historia.append(-5)
 
