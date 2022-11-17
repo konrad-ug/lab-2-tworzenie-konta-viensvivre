@@ -1,9 +1,10 @@
+import sys
 import unittest
+sys.path.append(r'/Users/wiktoriagirzelska/Desktop/studia/testowanie/lab-2-tworzenie-konta-viensvivre/app')
+from Konto import Konto
+from Konto import KontoFirmowe
 
-from ..Konto import Konto
-from ..Konto import KontoFirmowe
-
-class TestCreateBankAccount(unittest.TestCase):
+class testCreateBankAccount(unittest.TestCase):
 
     def test_tworzenie_konta(self):
         pierwsze_konto = Konto("Dariusz", "Januszewski", "02561422920")
@@ -30,13 +31,21 @@ class TestCreateBankAccount(unittest.TestCase):
         piate_konto = Konto("Adam", "Malysz", "77128219121", "PGISWJ")
         self.assertEqual(piate_konto.saldo, 0, "Bonus został dodany, mimo że kod jest nieprawidłowy")
 
+    def test_urodzeni_w_latach_1900_1909(self):
+        osme_konto =  Konto("Borys", "Kowalski", "08114887211", "PROM_XUZ")
+        self.assertEqual(osme_konto.saldo, 0, "Uwzględniono bonus pomimo złego wieku")
+
+    def test_urodzeni_w_latach_2010_plus(self):
+        osme_konto = Konto("Borys", "Kowalski", "12214887211", "PROM_XUZ")
+        self.assertEqual(osme_konto.saldo, 50, "Nie uwzględniono kodu rabatowego mimo prawidłowego wieku")
+
     def test_urodzeni_po_1960(self):
         szoste_konto = Konto("Jaś", "Fasola", "02254552112", "PROM_XYZ")
         self.assertEqual(szoste_konto.saldo, 50, "Nie uwzględniono kodu rabatowego mimo prawidłowego wieku")
 
     def test_urodzeni_przed_1960(self):
-        siodme_konto = Konto("Adam", "Mickiewicz", "83015849211", "PROM_XXX")
-        self.assertEqual(siodme_konto.saldo, 50, "Nie uwzględniono bonusu pomimi dobrego wieku i kodu")
+        siodme_konto = Konto("Adam", "Mickiewicz", "43015849211", "PROM_XXXZ")
+        self.assertEqual(siodme_konto.saldo, 0, "Uwzględniono bonus pomimo złego wieku")
 
 class TestPrzelewy(unittest.TestCase):
 
@@ -110,3 +119,5 @@ class TestPrzelewyEkspresowe(unittest.TestCase):
         konto.saldo = 250
         konto.przelew_ekspresowy(350)
         self.assertEqual(konto.saldo, 250, "Przelew wykonany pomimo niewystarczających środków")
+
+unittest.main()
