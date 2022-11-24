@@ -2,7 +2,7 @@ import sys
 import unittest
 sys.path.append(r'/Users/wiktoriagirzelska/Desktop/studia/testowanie/lab-2-tworzenie-konta-viensvivre/app')
 from Konto import Konto
-from Konto import KontoFirmowe
+from KontoFirmowe import KontoFirmowe
 
 class testCreateBankAccount(unittest.TestCase):
 
@@ -87,7 +87,7 @@ class KontaFirmowe(unittest.TestCase):
         self.assertEqual(konto1.NIP, "2203488202", "NIP nie został zapisany")
 
     def test_poprawny_NIP(self):
-        konto1 = KontoFirmowe("Budimex", "2203202895")
+        konto1 = KontoFirmowe("Budimex", "2202895333")
         self.assertEqual(len(konto1.NIP), 10, "Niepoprawna długość NIP")
 
     def test_niepoprawny_NIP(self):
@@ -119,5 +119,14 @@ class TestPrzelewyEkspresowe(unittest.TestCase):
         konto.saldo = 250
         konto.przelew_ekspresowy(350)
         self.assertEqual(konto.saldo, 250, "Przelew wykonany pomimo niewystarczających środków")
+
+class TestKredyt(unittest.TestCase):
+
+    def test_kredyt(self, historia, kwota, zgoda, saldo):
+        self.konto.historia = historia
+        zgoda_na_kredyt = self.konto.zaciagnij_kredyt(kwota)
+        self.assertEqual(zgoda_na_kredyt, zgoda)
+        self.assertEqual(self.konto.saldo, saldo, "Kredyt nie został przyznany poprawnie!")
+
 
 unittest.main()

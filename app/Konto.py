@@ -63,20 +63,14 @@ class Konto:
         else:
             return 0
 
-class KontoFirmowe:
-    def __init__(self, nazwa, NIP):
-        self.nazwa = nazwa
-        if len(NIP) != 10:
-            self.NIP = "Niepoprawny NIP"
+    def warunki_kredytu(self, kredyt):
+        if (self.historia[-1] > 0 and self.historia[-2] > 0 and self.historia[-3] > 0 and sum(self.historia[-5:]) > kredyt):
+            return True
         else:
-            self.NIP = NIP
-        self.saldo = 0
-        self.historia = []
+            return False
 
-    def przelew_ekspresowy(self, przelew):
-        if self.saldo >= przelew:
-            self.saldo -= przelew
-            self.saldo -= 5
-            self.historia.append(-przelew)
-            self.historia.append(-5)
+
+
+
+
 
