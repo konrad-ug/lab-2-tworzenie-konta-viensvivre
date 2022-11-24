@@ -3,7 +3,7 @@ import unittest
 sys.path.append(r'/Users/wiktoriagirzelska/Desktop/studia/testowanie/lab-2-tworzenie-konta-viensvivre/app')
 from Konto import Konto
 from KontoFirmowe import KontoFirmowe
-from parametrized import parametrized
+from parameterized import parameterized
 
 class testCreateBankAccount(unittest.TestCase):
 
@@ -127,13 +127,21 @@ class TestKredyt(unittest.TestCase):
     nazwisko = "Januszewski"
     pesel = "44161422920"
 
+    def setUp(self):
+        self.konto = Konto(self.imie, self.nazwisko, self.pesel)
 
+    @parameterized.expand([
+        ([100,200,300,400,500], 450, True, 450),
+        ([-30, 200, 330, -400, 200], 300, False, 0),
+        ([200, -2000, 100, 250, 150], 1500, False, 0),
+        ([200, 400, 500, 600], 400, False, 0)
+    ])
 
     def test_kredyt(self, historia, kwota, zgoda, saldoK):
-        konto1 = Konto("Dariusz", "Januszewski", "44161422920", [100,200,300,400,500], 450, True, 450)
-        zgoda_na_kredyt = self.konto1.zaciagnij_kredyt(kwota)
+        self.konto.historia = historia
+        zgoda_na_kredyt = self.konto.zaciagnij_kredyt(kwota)
         self.assertEqual(zgoda_na_kredyt, zgoda)
         self.assertEqual(self.konto.saldo, saldoK, "Kredyt nie został przyznany poprawnie!")
 
 
-#unittest.main()
+unittest.main()

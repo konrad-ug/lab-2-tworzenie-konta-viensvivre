@@ -69,7 +69,14 @@ class Konto:
         else:
             return False
 
-
+    def zaciagnij_kredyt(self, kredyt):
+        if len(self.historia) < 5:
+            return False
+        else:
+            if self.warunki_kredytu(kredyt):
+                self.saldo += kredyt
+                return True
+            return False
 
 
 
