@@ -14,3 +14,10 @@ class KontoFirmowe:
             self.saldo -= 5
             self.historia.append(-przelew)
             self.historia.append(-5)
+
+    def zaciagnij_kredyt(self, kredyt):
+        if (self.saldo >= 2 * kredyt and -1775 in self.historia):
+            self.saldo += kredyt
+            return True
+        else:
+            return False

@@ -143,5 +143,26 @@ class TestKredyt(unittest.TestCase):
         self.assertEqual(zgoda_na_kredyt, zgoda)
         self.assertEqual(self.konto.saldo, saldoK, "Kredyt nie został przyznany poprawnie!")
 
+class TestKredytNaFirme(unittest.TestCase):
+
+    nazwa = "TomiBurgers"
+    nip = "8610032408"
+
+    def setUp(self):
+        self.konto_firmowe = KontoFirmowe(self.nazwa, self.nip)
+
+    @parameterized.expand([
+        ([-1775, 5000, 3000, 1000], 5000, 2500, True, 7500),
+        ([200, 5000, 2000], 4000, 200, False, 4000),
+        ([200, -1775, 2000, 300], 3000, 2000, False, 3000),
+        ([2000, -500, 200, -3000], 1200, 1000, False, 1200)
+    ])
+
+    def test_kredyt_dla_firm(self, historia, saldo, kwota, zgoda, saldoK):
+        self.konto_firmowe.saldo = saldo
+        self.konto_firmowe.historia = historia
+        zgoda_na_kredyt = self.konto_firmowe.zaciagnij_kredyt(kwota)
+        self.assertEqual(zgoda_na_kredyt, zgoda)
+        self.assertEqual(self.konto_firmowe.saldo, saldoK, "Kredyt nie został udzielony poprawnie")
 
 unittest.main()
