@@ -3,6 +3,7 @@ import unittest
 sys.path.append(r'/Users/wiktoriagirzelska/Desktop/studia/testowanie/lab-2-tworzenie-konta-viensvivre/app')
 from Konto import Konto
 from KontoFirmowe import KontoFirmowe
+from RejestrKont import RejestrKont
 from parameterized import parameterized
 
 class testCreateBankAccount(unittest.TestCase):
@@ -164,5 +165,41 @@ class TestKredytNaFirme(unittest.TestCase):
         zgoda_na_kredyt = self.konto_firmowe.zaciagnij_kredyt(kwota)
         self.assertEqual(zgoda_na_kredyt, zgoda)
         self.assertEqual(self.konto_firmowe.saldo, saldoK, "Kredyt nie został udzielony poprawnie")
+
+class TestRejestrKont(unittest.TestCase):
+    imie = "Wiktoria"
+    nazwisko = "Girzelska"
+    pesel = "02859201918"
+
+    @classmethod
+    def setUpClass(cls):
+        konto = Konto(cls.imie, cls.nazwisko, cls.pesel)
+        RejestrKont.dodaj_konto(konto)
+
+    def test_1_zliczenie_kont(self):
+        konto1 = Konto("Hania", "Kowal", "08135571910")
+        RejestrKont.dodaj_konto(konto1)
+        konto2 = Konto("Anna", "Pawlowska", "02457723711")
+        RejestrKont.dodaj_konto(konto2)
+        self.assertEqual(RejestrKont.ilosc_kont(), 3, "W rejestrze są 3 konta a funkcja zwraca inną ilość")
+
+    def test_2_zliczenie_kont(self):
+        konto3 = Konto(self.imie, self.nazwisko, self.pesel)
+        RejestrKont.dodaj_konto(konto3)
+        self.assertEqual(RejestrKont.ilosc_kont(), 4, "W rejestrze są 4 konta a funkcja zwraca inną ilość")
+
+    def test_3_wyszukaj_konto_po_peselu(self):
+        konto4 = Konto(self.imie, self.nazwisko, self.pesel)
+        konto5 = Konto("Wiktoria", "Biniewska", "02283900182")
+        RejestrKont.dodaj_konto(konto4)
+        RejestrKont.dodaj_konto(konto5)
+        self.assertEqual(RejestrKont.szukaj_po_peselu("02283900182"), konto5, "Wyświetlono złego użytkownika")
+
+    def test_4_wyszukaj_nieistniejace_konto(self):
+        self.assertEqual(RejestrKont.szukaj_po_peselu("03829923229"), None, "Nie istnieje konto o takim peselu, a zostało wyświetlone")
+
+    @classmethod
+    def tearDownClass(cls):
+        RejestrKont.listaKont = []
 
 unittest.main()
