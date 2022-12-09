@@ -5,15 +5,25 @@ from Konto import Konto
 from RejestrKont import RejestrKont
 
 app = Flask(__name__)
+@app.route("/")
+def home():
+    return "hello world"
+
+@app.route("/konta")
+def konta():
+    return "Konta"
 
 @app.route("/konta/stworz_konto", methods=['POST'])
-
 def stworz_konto():
     dane = request.get_json()
     print(f"Request o stworzenie konta z danymi: {dane}")
-    konto = Konto(dane["imie"], dane["nazwisko"], dane["pesel"])
-    RejestrKont.dodaj_konto(konto)
-    return jsonify("Konto zostało stworzone"), 201
+    if RejestrKont.szukaj_po_peselu(dane["pesel"]) == None:
+        konto = Konto(dane["imie"], dane["nazwisko"], dane["pesel"])
+        RejestrKont.dodaj_konto(konto)
+        return jsonify("Konto zostało stworzone"), 200
+    else:
+        return jsonify("Ten pesel juz istnieje"), 400
+
 
 @app.route("/konta/ile_kont", methods=['GET'])
 
@@ -31,3 +41,6 @@ def wyszukaj_konto_z_peselem(pesel):
         return jsonify(imie=konto.imie, nazwisko=konto.nazwisko, pesel=konto.pesel, saldo=konto.saldo), 200
     else:
         return jsonify("Konto nie istnieje"), 404
+
+if __name__ == '__main__':
+    app.run()
