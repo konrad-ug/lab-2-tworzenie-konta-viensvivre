@@ -10,7 +10,12 @@ class TestKontoApi(unittest.TestCase):
         'pesel': '02282093811'
     }
 
-    url = 'http://localhost:5000'
+    url = 'http://127.0.0.1:5000/'
+
+    data = {
+        'imie': 'Ala',
+        'saldo': 40
+    }
 
     def test_1_stworz_konto(self):
         create_response = requests.post(self.url + '/konta/stworz_konto', json=self.body)
@@ -25,7 +30,7 @@ class TestKontoApi(unittest.TestCase):
         self.assertEqual(response_body["imie"], self.body["imie"])
         self.assertEqual(response_body["saldo"], 0)
 
-    def test_3_update_po_peselu(self):
+    def test_3_aktualizuj_po_peselu(self):
         put_resp = requests.put(self.url + f"/konta/konto/{self.body['pesel']}", json=self.data)
         self.assertEqual(put_resp.status_code, 200)
         get_resp = requests.get(self.url + f"/konta/konto/{self.body['pesel']}")
@@ -36,5 +41,17 @@ class TestKontoApi(unittest.TestCase):
         self.assertEqual(resp_body["pesel"], self.body["pesel"])
         self.assertEqual(resp_body["saldo"], self.data["saldo"])
 
+    def test_4_usun_po_peselu(self):
+        ile_kont = int(requests.get(self.url + f"/konta/ile_kont").json())
+        res_delete = requests.delete(self.url + f"/konta/konto/{self.body['pesel']}")
+        self.assertEqual(res_delete.status_code, 200)
+        liczba_kont_po_usunieciu = int(requests.get(self.url + f"/konta/ile_kont").json())
+        self.assertEqual(liczba_kont_po_usunieciu, ile_kont - 1)
 
-#unittest.main()
+    def test_5_dodanie_konta_ktore_istnieje(self):
+        create_response3 = requests.post(self.url + '/konta/stworz_konto', json=self.body)
+        self.assertEqual(create_response3.status_code, 200)
+        create_response4 = requests.post(self.url + '/konta/stworz_konto', json=self.body)
+        self.assertEqual(create_response4.status_code, 400)
+
+unittest.main()
