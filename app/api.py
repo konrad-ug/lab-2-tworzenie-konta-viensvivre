@@ -42,5 +42,24 @@ def wyszukaj_konto_z_peselem(pesel):
     else:
         return jsonify("Konto nie istnieje"), 404
 
+@app.route("/konta/konto/<pesel>", methods=['PUT'])
+
+def zaktualizuj_konto_z_peselem(pesel):
+    dane = request.get_json()
+    print(f"Request o aktualizację konta z peselem: {pesel} i danymi: {dane}")
+    konto = RejestrKont.zaktualizuj_konto_z_peselem(pesel, dane)
+    print(konto)
+    if konto != None:
+        return jsonify("Konto zostało zaktualizowane"), 200
+    else:
+        return jsonify("Konto nie istnieje"), 404
+
+@app.route("/konta/konto/<pesel>", methods=['DELETE'])
+
+def usun_konto_z_peselem(pesel):
+    print(f"Request o usunięcie konta z peselem: {pesel}")
+    RejestrKont.usun_konto_z_peselem(pesel)
+    return jsonify("Konto zostało usunięte"), 200
+
 if __name__ == '__main__':
     app.run()
